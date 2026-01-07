@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陶艺惊艳：傅举有先生与马王堆汉墓陶器研究</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #fafaf9; }
+        h1, h2, h3, .serif { font-family: 'Noto Serif SC', serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; height: 350px; margin: 0 auto; }
+        .nav-active { border-bottom: 3px solid #7c2d12; color: #44403c; font-weight: 700; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-stone-800 flex flex-col min-h-screen">
+
+    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+
+    <div class="fixed bottom-8 right-8 z-50">
+        <button onclick="app.toggleMusic()" id="music-btn" class="bg-orange-900 text-white p-4 rounded-full shadow-2xl hover:bg-orange-800 transition-all flex items-center justify-center border-2 border-orange-200">
+            <span id="music-icon" class="text-xl">🎵</span>
+        </button>
+    </div>
+
+    <header class="bg-stone-900 text-stone-100 py-8 shadow-md">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b border-stone-700 pb-6 mb-4">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-wide mb-2">陶艺惊艳：长沙马王堆汉墓</h1>
+                    <p class="text-stone-400 text-sm md:text-base serif italic">傅举有先生学术研究专题报告</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <div class="text-2xl font-bold text-orange-400">精彩纷呈</div>
+                    <div class="text-xs text-stone-500 uppercase tracking-widest">Digital Museum Experience</div>
+                </div>
+            </div>
+            <nav class="flex space-x-6 overflow-x-auto pb-1 text-sm md:text-base">
+                <button onclick="app.navigate('overview')" id="nav-overview" class="nav-item nav-active pb-2 px-1">研究概览</button>
+                <button onclick="app.navigate('gallery')" id="nav-gallery" class="nav-item text-stone-500 pb-2 px-1">器型艺廊</button>
+                <button onclick="app.navigate('technique')" id="nav-technique" class="nav-item text-stone-500 pb-2 px-1">工艺与美学</button>
+                <button onclick="app.navigate('analysis')" id="nav-analysis" class="nav-item text-stone-500 pb-2 px-1">考古数据分析</button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app-content" class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        </main>
+
+    <footer class="bg-stone-200 text-stone-600 py-6 mt-12 border-t border-stone-300">
+        <div class="container mx-auto px-4 text-center text-xs">
+            <p>基于傅举有先生关于马王堆汉墓陶器的研究著作</p>
+            <p class="mt-2 text-stone-400">数字博物馆沉浸式演示</p>
+        </div>
+    </footer>
+
+    <script>
+        const reportData = {
+            overview: {
+                intro: "长沙马王堆汉墓的出土，不仅展现了汉代漆器的辉煌，其出土的陶器同样精彩纷呈。傅举有先生的研究指出，这些陶器在数量、种类及艺术价值上，皆反映了汉初「楚风汉韵」的独特美学。它们不仅是随葬的「明器」，更是当时礼仪制度与生活方式的缩影。",
+                stats: [
+                    { label: "出土陶器总数", value: "500+", unit: "件", desc: "涵盖鼎、盒、壶、钟、钫等多种器型" },
+                    { label: "主要类别", value: "3", unit: "大类", desc: "彩绘陶、印纹硬陶、釉陶" },
+                    { label: "历史时期", value: "西汉", unit: "初期", desc: "公元前2世纪 · 长沙国丞相家族" }
+                ],
+                highlights: ["仿铜陶器与仿漆陶器的完美结合", "流畅奔放的彩绘云气纹装饰", "反映了「事死如事生」的丧葬观念"]
+            },
+            gallery: [
+                { id: "ding", name: "彩绘陶鼎", role: "礼器", icon: "⾹", desc: "仿铜礼器。盖面隆起，三足。马王堆陶鼎多饰以彩绘，纹饰繁复。", fu_comment: "傅举有先生认为，这些陶鼎虽为明器，但其造型严谨，彩绘绚丽，不仅模仿铜器的庄重，更增添了漆器的华美，是「礼」与「艺」的结合。", features: ["圆腹三足", "朱红彩绘", "云气纹饰"] },
+                { id: "hu", name: "印纹硬陶壶", role: "盛酒器", icon: "壶", desc: "质地坚硬，火候高。肩部常有铺首衔环装饰，表面拍印几何纹饰。", fu_comment: "此类硬陶展示了当时高超的烧制技术，敲击声清脆，接近原始瓷器，是汉代制陶工艺的巅峰代表。", features: ["几何印纹", "铺首装饰", "胎质坚硬"] },
+                { id: "fang", name: "彩绘方壶", role: "盛储器", icon: "⚃", desc: "方形壶身，腹部外鼓。通体髹漆底并绘有流云纹，极尽奢华。", fu_comment: "其色彩对比强烈，黑底红纹或黄纹，线条流畅如行云流水，展现了汉代工匠自信豪迈的艺术气质。", features: ["方形器身", "流云纹", "黑地彩绘"] }
+            ],
+            technique: {
+                painted: { title: "彩绘陶", content: "彩绘陶是马王堆陶器的精华。工匠在烧制好的陶胎上，先涂一层底色，再用矿物颜料绘制纹饰。线线条多变，气势磅礴。", keywords: ["低温烧制", "矿物颜料", "云气纹"] },
+                glazed: { title: "釉陶与硬陶", content: "釉陶表面施有青黄色釉，光亮润泽。这标志着汉代制陶术向瓷器的过渡。", keywords: ["高温烧制", "拍印纹饰", "实用性强"] }
+            }
+        };
+
+        const app = {
+            state: { musicPlaying: false },
+
+            init: function() { this.navigate('overview'); },
+
+            navigate: function(tabId) {
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+                document.getElementById(`nav-${tabId}`).classList.add('nav-active');
+                const container = document.getElementById('app-content');
+                container.innerHTML = '';
+                if(tabId === 'overview') this.renderOverview(container);
+                if(tabId === 'gallery') this.renderGallery(container);
+                if(tabId === 'technique') this.renderTechnique(container);
+                if(tabId === 'analysis') container.innerHTML = '<div class="text-center p-20 text-stone-400">数据分析模组加载中...</div>';
+            },
+
+            toggleMusic: function() {
+                const music = document.getElementById('bg-music');
+                const icon = document.getElementById('music-icon');
+                const btn = document.getElementById('music-btn');
+                if (music.paused) {
+                    music.play();
+                    icon.innerText = '⏸';
+                    btn.classList.add('animate-spin-slow');
+                } else {
+                    music.pause();
+                    icon.innerText = '🎵';
+                    btn.classList.remove('animate-spin-slow');
+                }
+            },
+
+            speak: function(text) {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    return;
+                }
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'zh-CN';
+                msg.rate = 0.85; // 稳重的语速
+                msg.pitch = 0.9; // 略低沉
+                window.speechSynthesis.speak(msg);
+            },
+
+            renderOverview: function(container) {
+                const data = reportData.overview;
+                container.innerHTML = `
+                    <div class="animate-fade-in space-y-8">
+                        <section class="bg-white p-8 rounded-lg shadow-sm border-l-4 border-orange-800">
+                            <h2 class="text-2xl font-bold mb-4 serif">研究背景</h2>
+                            <p class="text-lg leading-relaxed text-stone-600">${data.intro}</p>
+                        </section>
+                        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            ${data.stats.map(s => `<div class="bg-stone-100 p-6 rounded-lg text-center border border-stone-200">
+                                <div class="text-4xl font-bold text-orange-900 serif mb-2">${s.value}<span class="text-base font-normal ml-1">${s.unit}</span></div>
+                                <div class="font-bold text-stone-700">${s.label}</div>
+                            </div>`).join('')}
+                        </section>
+                    </div>`;
+            },
+
+            renderGallery: function(container) {
+                container.innerHTML = `
+                    <div class="animate-fade-in space-y-6">
+                        <h2 class="text-2xl font-bold serif text-stone-800">器型艺廊</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${reportData.gallery.map(item => `
+                                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-stone-200 card-hover transition-all">
+                                    <div class="p-6">
+                                        <div class="text-xs text-orange-600 font-bold mb-1 uppercase">${item.role}</div>
+                                        <h3 class="text-xl font-bold serif mb-2">${item.name}</h3>
+                                        <p class="text-stone-500 text-sm mb-4">${item.desc}</p>
+                                        <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-300 relative">
+                                            <p class="italic text-stone-700 text-sm mb-3">"${item.fu_comment}"</p>
+                                            <div class="flex justify-between items-center">
+                                                <button onclick="app.speak('${item.fu_comment}')" class="text-xs bg-orange-200 hover:bg-orange-300 px-3 py-1 rounded-full transition-colors flex items-center">
+                                                    <span class="mr-1">🔊</span> 听取点评
+                                                </button>
+                                                <span class="text-xs font-bold text-orange-800">— 傅举有 评</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+            },
+
+            renderTechnique: function(container) {
+                const data = reportData.technique;
+                container.innerHTML = `
+                    <div class="animate-fade-in grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-lg shadow-md border-t-4 border-orange-800">
+                            <h3 class="text-2xl font-bold serif mb-4">${data.painted.title}</h3>
+                            <p class="text-stone-600 leading-relaxed">${data.painted.content}</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-lg shadow-md border-t-4 border-stone-800">
+                            <h3 class="text-2xl font-bold serif mb-4">${data.glazed.title}</h3>
+                            <p class="text-stone-600 leading-relaxed">${data.glazed.content}</p>
+                        </div>
+                    </div>`;
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>
